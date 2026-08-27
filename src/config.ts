@@ -37,6 +37,9 @@ const schema = z.object({
     errorMap: () => ({ message: "STELLAR_NETWORK must be either 'testnet' or 'public'" }),
   }),
   HORIZON_URL: urlSchema,
+  // Ordered, comma-separated Horizon endpoints. HORIZON_URL remains the
+  // backwards-compatible primary endpoint when this is not set.
+  HORIZON_URLS: z.string().optional(),
   
   // Fee configuration with sensible defaults
   FEE_CACHE_TTL: z.coerce.number().positive().default(30),
@@ -245,6 +248,10 @@ const networkPassphrase =
 
 export const config = {
   ...parsed,
+  HORIZON_ENDPOINTS: (parsed.HORIZON_URLS ?? parsed.HORIZON_URL)
+    .split(",")
+    .map((url) => url.trim())
+    .filter(Boolean),
   API_URL: parsed.API_PUBLIC_URL,
   SEP10_HOME_DOMAIN: parsed.SEP10_HOME_DOMAIN ?? apiHost,
   WEB_AUTH_DOMAIN: parsed.WEB_AUTH_DOMAIN ?? apiHost,
