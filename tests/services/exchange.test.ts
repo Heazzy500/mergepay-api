@@ -26,4 +26,18 @@ describe("exchange service", () => {
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("timeout")));
     expect(await convertAmount("2.5", "XLM", "USDC")).toBe("0.2500000");
   });
+
+  it("refreshes the quote after the configured cache TTL", async () => {
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ asks: [{ price: "0.10" }], bids: [{ price: "0.10" }] }) })
+      .mockResolvedValueOnce({ ok: true, json: async () => ({ asks: [{ price: "0.20" }], bids: [{ price: "0.20" }] }) });
+    vi.stubGlobal("fetch", fetchMock);
+    const now = Date.now();
+    vi.spyOn(Date, "now").mockReturnValue(now);
+    await getExchangeRate("XLM", "USDC");
+    vi.spyOn(Date, "now").mockReturnValue(now + 301_000);
+    const refreshed = await getExchangeRate("XLM", "USDC");
+    expect(refreshed.rate).toBe(0.2);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
 });
