@@ -25,6 +25,7 @@ import uploadRoutes from "./routes/uploads";
 import auditLogRoutes from "./routes/audit-log";
 import sep24Routes from "./routes/sep24";
 import webhookRoutes from "./routes/webhooks";
+import exchangeRateRoutes from "./routes/exchange-rates";
 import userGroupsRoutes from "./routes/user-groups";
 import healthRoutes from "./routes/health";
 import { getCorrelationId } from "./lib/correlation";
@@ -287,6 +288,7 @@ export async function buildApp(): Promise<FastifyInstance> {
   await app.register(auditLogRoutes);
   await app.register(sep24Routes);
   await app.register(webhookRoutes);
+  await app.register(exchangeRateRoutes);
 
   return app;
 }

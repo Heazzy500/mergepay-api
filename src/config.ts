@@ -40,6 +40,7 @@ const schema = z.object({
   
   // Fee configuration with sensible defaults
   FEE_CACHE_TTL: z.coerce.number().positive().default(30),
+  EXCHANGE_RATE_CACHE_TTL: z.coerce.number().positive().default(300),
   MAX_FEE_STROOPS: z.coerce.number().int().positive().default(1000),
   DEFAULT_FEE_STROOPS: z.coerce.number().int().positive().default(100),
   
