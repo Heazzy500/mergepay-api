@@ -10,3 +10,7 @@ uploads/*
 # Local Wave build scaffolding (task prompts, not product)
 01-labels-issues-api/
 02-hygiene-api/
+branch_structure.json
+temp_auto_push.bat
+temp_interactive_push.bat
+.gitignore
