@@ -55,7 +55,7 @@ function isRetryableHorizonError(error: any): boolean {
   const status = error?.response?.status;
   return status === undefined || status === 408 || status === 429 || status >= 500;
 }
-async function withHorizonFailover<T>(operation: (horizon: Horizon.Server) => Promise<T>): Promise<T> {
+export async function withHorizonFailover<T>(operation: (horizon: Horizon.Server) => Promise<T>): Promise<T> {
   const tried = new Set<number>();
   let lastError: unknown;
   for (let attempt = 0; attempt < servers().length; attempt++) {
